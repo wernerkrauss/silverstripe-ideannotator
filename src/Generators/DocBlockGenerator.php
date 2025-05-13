@@ -129,9 +129,11 @@ class DocBlockGenerator
             // There is no setDescription method so we use reflection
             if ($currentTag && $currentTag instanceof BaseTag && $currentTag->getDescription()) {
                 $refObject = new ReflectionObject($generatedTag);
-                $refProperty = $refObject->getProperty('description');
-                $refProperty->setAccessible(true);
-                $refProperty->setValue($generatedTag, $currentTag->getDescription());
+                if ($refObject->hasProperty('description')) {
+                    $refProperty = $refObject->getProperty('description');
+                    $refProperty->setAccessible(true);
+                    $refProperty->setValue($generatedTag, $currentTag->getDescription());
+                }
             }
             $mergedTags[] = $generatedTag;
         }
